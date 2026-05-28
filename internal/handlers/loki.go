@@ -338,7 +338,11 @@ func executeLokiQuery(ctx context.Context, queryURL string, username, password, 
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
+	defer func() {
+		if cerr := resp.Body.Close(); cerr != nil {
+			fmt.Printf("loki query: error closing response body: %v\n", cerr)
+		}
+	}()
 
 	// Read response
 	body, err := io.ReadAll(resp.Body)
@@ -823,7 +827,11 @@ func executeLokiLabelsQuery(ctx context.Context, queryURL string, username, pass
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
+	defer func() {
+		if cerr := resp.Body.Close(); cerr != nil {
+			fmt.Printf("loki labels: error closing response body: %v\n", cerr)
+		}
+	}()
 
 	// Read response
 	body, err := io.ReadAll(resp.Body)
@@ -878,7 +886,11 @@ func executeLokiLabelValuesQuery(ctx context.Context, queryURL string, username,
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
+	defer func() {
+		if cerr := resp.Body.Close(); cerr != nil {
+			fmt.Printf("loki label values: error closing response body: %v\n", cerr)
+		}
+	}()
 
 	// Read response
 	body, err := io.ReadAll(resp.Body)
